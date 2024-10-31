@@ -16,8 +16,8 @@ N = 1000             # 像素数量
 source1_pos = np.array([d/2,0,0])
 source2_pos = np.array([-d/2,0,0])
 # 场点位置
-x = np.linspace(-0.01, 0.01, N)  # 屏幕上的位置
-y = np.linspace(-0.01, 0.01, N)  # 屏幕上的位置
+x = np.linspace(-0.1, 0.1, N)  # 屏幕上的位置
+y = np.linspace(-0.1, 0.1, N)  # 屏幕上的位置
 X, Y = np.meshgrid(x, y)          # 创建网格
 z0 = 1
 
@@ -30,9 +30,8 @@ def update(val):
     source2_pos[0] = -d / 2
     r1 = np.sqrt((X - source1_pos[0]) ** 2 + (Y - source1_pos[1]) ** 2 + z0 ** 2)
     r2 = np.sqrt((X - source2_pos[0]) ** 2 + (Y - source2_pos[1]) ** 2 + z0 ** 2)
-    # E = A1 / r1 * np.cos(2 * np.pi / wavelength * r1) + A2 / r2 * np.cos(2 * np.pi / wavelength * r2)
-    E = A1 * np.cos(2 * np.pi / wavelength * r1) + A2 * np.cos(2 * np.pi / wavelength * r2)
-    Ei = A1 * np.sin(2 * np.pi / wavelength * r1) + A2 * np.sin(2 * np.pi / wavelength * r2)
+    E = A1/r1 * np.cos(2 * np.pi / wavelength * r1) + A2/r2 * np.cos(2 * np.pi / wavelength * r2)
+    Ei = A1/r1 * np.sin(2 * np.pi / wavelength * r1) + A2/r2 * np.sin(2 * np.pi / wavelength * r2)
     I = np.sqrt(E ** 2 + Ei ** 2)
 
     # 更新图像
@@ -48,8 +47,8 @@ plt.subplots_adjust(bottom=0.35)
 r1 = np.sqrt((X - source1_pos[0])**2 + (Y - source1_pos[1])**2 + z0**2)
 r2 = np.sqrt((X - source2_pos[0])**2 + (Y - source2_pos[1])**2 + z0**2)
 # E = A1 / r1 * np.cos(2 * np.pi / wavelength * r1) + A2 / r2 * np.cos(2 * np.pi / wavelength * r2)
-E = A1 * np.cos(2 * np.pi / wavelength * r1) + A2  * np.cos(2 * np.pi / wavelength * r2)
-Ei = A1 * np.sin(2 * np.pi / wavelength * r1) + A2  * np.sin(2 * np.pi / wavelength * r2)
+E = A1/r1 * np.cos(2 * np.pi / wavelength * r1) + A2/r2 * np.cos(2 * np.pi / wavelength * r2)
+Ei = A1/r1 * np.sin(2 * np.pi / wavelength * r1) + A2/r2 * np.sin(2 * np.pi / wavelength * r2)
 I = np.sqrt(E**2+Ei**2)
 
 img = ax.imshow(I, extent=(-0.01, 0.01, -0.01, 0.01), origin='lower', cmap='hot')
@@ -60,7 +59,7 @@ ax.set_ylabel('y (m)')
 
 # 创建滑块
 ax_slider = plt.axes([0.1, 0.1, 0.8, 0.03])  # [left, bottom, width, height]
-slider = Slider(ax_slider, 'z0 (m)', 1, 10, valinit=z0)
+slider = Slider(ax_slider, 'z0 (m)', 0, 10, valinit=z0)
 ax_slider_d = plt.axes([0.1, 0.15, 0.8, 0.03])  # d滑块位置
 slider_d = Slider(ax_slider_d, 'd (m)', 0.00001, 0.01, valinit=d)
 
