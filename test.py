@@ -19,7 +19,7 @@ source2_pos = np.array([-d/2,0,0])
 x = np.linspace(-0.01, 0.01, N)  # 屏幕上的位置
 y = np.linspace(-0.01, 0.01, N)  # 屏幕上的位置
 X, Y = np.meshgrid(x, y)          # 创建网格
-z0 = 0.1
+z0 = 1
 
 
 # 更新函数
@@ -57,7 +57,7 @@ ax.set_ylabel('y (m)')
 
 # 创建滑块
 ax_slider = plt.axes([0.1, 0.1, 0.8, 0.03])  # [left, bottom, width, height]
-slider = Slider(ax_slider, 'z0 (m)', 0.02, 0.5, valinit=z0)
+slider = Slider(ax_slider, 'z0 (m)', 1, 10, valinit=z0)
 ax_slider_d = plt.axes([0.1, 0.15, 0.8, 0.03])  # d滑块位置
 slider_d = Slider(ax_slider_d, 'd (m)', 0.0005, 0.002, valinit=d)
 
