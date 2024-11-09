@@ -6,23 +6,21 @@ from matplotlib.widgets import Slider
 wavelength = 500e-9  # 光的波长，单位米
 w = 2*np.pi*3e8/wavelength # 光的角频率
 A1 = 1    # 波1的振幅
-A2 = 2    # 波2的振幅
+A2 = 1    # 波2的振幅
 d = 5e-4            # 双孔间距，单位米
-L = 1                # 屏幕距离，单位米
 N = 1000             # 像素数量
 
-# 计算
 # 光源位置
 source1_pos = np.array([d/2,0,0])
 source2_pos = np.array([-d/2,0,0])
+
 # 场点位置
 x = np.linspace(-0.1, 0.1, N)  # 屏幕上的位置
 y = np.linspace(-0.1, 0.1, N)  # 屏幕上的位置
 X, Y = np.meshgrid(x, y)          # 创建网格
 z0 = 1
 
-
-# 更新函数
+# 更新参数
 def update(val):
     z0 = slider.val
     d = slider_d.val
@@ -30,9 +28,8 @@ def update(val):
     source2_pos[0] = -d / 2
     r1 = np.sqrt((X - source1_pos[0]) ** 2 + (Y - source1_pos[1]) ** 2 + z0 ** 2)
     r2 = np.sqrt((X - source2_pos[0]) ** 2 + (Y - source2_pos[1]) ** 2 + z0 ** 2)
-    E = A1/r1 * np.cos(2 * np.pi / wavelength * r1) + A2/r2 * np.cos(2 * np.pi / wavelength * r2)
-    Ei = A1/r1 * np.sin(2 * np.pi / wavelength * r1) + A2/r2 * np.sin(2 * np.pi / wavelength * r2)
-    I = np.sqrt(E ** 2 + Ei ** 2)
+
+    I = A1**2 + A2**2 + 2*A1*A2*np.cos(2*np.pi/wavelength*(r1-r2))
 
     # 更新图像
     img.set_array(I)
@@ -46,10 +43,7 @@ plt.subplots_adjust(bottom=0.35)
 # 初始图像
 r1 = np.sqrt((X - source1_pos[0])**2 + (Y - source1_pos[1])**2 + z0**2)
 r2 = np.sqrt((X - source2_pos[0])**2 + (Y - source2_pos[1])**2 + z0**2)
-# E = A1 / r1 * np.cos(2 * np.pi / wavelength * r1) + A2 / r2 * np.cos(2 * np.pi / wavelength * r2)
-E = A1/r1 * np.cos(2 * np.pi / wavelength * r1) + A2/r2 * np.cos(2 * np.pi / wavelength * r2)
-Ei = A1/r1 * np.sin(2 * np.pi / wavelength * r1) + A2/r2 * np.sin(2 * np.pi / wavelength * r2)
-I = np.sqrt(E**2+Ei**2)
+I = A1**2 + A2**2 + 2*A1*A2*np.cos(2*np.pi/wavelength*(r1-r2))
 
 img = ax.imshow(I, extent=(-0.01, 0.01, -0.01, 0.01), origin='lower', cmap='hot')
 plt.colorbar(img, ax=ax, label='Intensity')
