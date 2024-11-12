@@ -3,12 +3,17 @@ import matplotlib.pyplot as plt
 from matplotlib.widgets import TextBox
 from matplotlib.colors import Normalize
 from matplotlib.cm import ScalarMappable
+from matplotlib.colors import LinearSegmentedColormap
 
 # 全局单位m
 
 # 设置全局字体为微软雅黑
 plt.rcParams['font.sans-serif'] = ['Microsoft YaHei']  # 设置中文字体
 plt.rcParams['axes.unicode_minus'] = False  # 用来正常显示负号
+
+# 定义一个从白色到绿色的自定义颜色映射
+colors = [(0, "white"), (1, "green")]  # 白色到绿色
+cmap_green = LinearSegmentedColormap.from_list("cmap_green", colors)
 
 # 参数
 wavelength = 555e-9  # 光的波长
@@ -41,7 +46,6 @@ def update(val):
     source2_pos[0] = -d / 2
     r1 = np.sqrt((X - source1_pos[0]) ** 2 + (Y - source1_pos[1]) ** 2 + z0 ** 2)
     r2 = np.sqrt((X - source2_pos[0]) ** 2 + (Y - source2_pos[1]) ** 2 + z0 ** 2)
-
     I = A1**2 + A2**2 + 2*A1*A2*np.cos(2*np.pi/wavelength*(r1-r2))
 
     # 更新图像
@@ -58,8 +62,11 @@ r1 = np.sqrt((X - source1_pos[0])**2 + (Y - source1_pos[1])**2 + z0**2)
 r2 = np.sqrt((X - source2_pos[0])**2 + (Y - source2_pos[1])**2 + z0**2)
 I = A1**2 + A2**2 + 2*A1*A2*np.cos(2*np.pi/wavelength*(r1-r2))
 
+# 创建归一化对象，控制图像的强度范围
+norm = Normalize(vmin=A1**2 + A2**2 - 2*A1*A2, vmax=A1**2 + A2**2 + 2*A1*A2)
+
 # 初始的颜色映射
-img = ax.imshow(I, extent=(-0.01, 0.01, -0.01, 0.01), origin='lower', cmap='hot')
+img = ax.imshow(I, extent=(-0.01, 0.01, -0.01, 0.01), origin='lower', cmap=cmap_green, norm=norm)
 plt.colorbar(img, ax=ax, label='光强')
 ax.set_title('干涉图像')
 ax.set_xlabel('x (m)')
